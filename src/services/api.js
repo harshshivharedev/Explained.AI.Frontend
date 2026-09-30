@@ -1,4 +1,16 @@
-const API_URL = import.meta.env.VITE_API_URL || '/api'
+function resolveApiUrl() {
+  const configured = import.meta.env.VITE_API_URL?.trim()
+  if (!configured) return '/api'
+
+  // A localhost URL baked into a production bundle points at each visitor's
+  // own machine, so fall back to the same-origin /api proxy (vercel.json).
+  const pointsToLocalhost = /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?/i.test(configured)
+  if (import.meta.env.PROD && pointsToLocalhost) return '/api'
+
+  return configured.replace(/\/+$/, '')
+}
+
+const API_URL = resolveApiUrl()
 
 async function request(path, options = {}) {
   const response = await fetch(`${API_URL}${path}`, {
