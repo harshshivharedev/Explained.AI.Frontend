@@ -24,7 +24,15 @@ export function AuthProvider({ children }) {
     setUser(null)
   }
 
-  return <AuthContext.Provider value={{ user, loading, isAuthenticated: Boolean(user), login, logout }}>{children}</AuthContext.Provider>
+  const value = {
+    user,
+    loading,
+    isAuthenticated: Boolean(user),
+    login,
+    logout,
+  }
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
 export function useAuth() {

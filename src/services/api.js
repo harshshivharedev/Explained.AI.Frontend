@@ -16,13 +16,39 @@ async function request(path, options = {}) {
   return payload.data
 }
 
-export const registerUser = (data) => request('/users/register', { method: 'POST', body: JSON.stringify(data) })
-export const loginUser = (data) => request('/users/login', { method: 'POST', body: JSON.stringify(data) })
+// Auth
+export const registerUser = (data) =>
+  request('/users/register', { method: 'POST', body: JSON.stringify(data) })
+
+export const loginUser = (data) =>
+  request('/users/login', { method: 'POST', body: JSON.stringify(data) })
+
 export const logoutUser = () => request('/users/logout', { method: 'POST' })
+
 export const getCurrentUser = () => request('/users/current-user')
 
-export const createExplanation = (data) => request('/explanations', { method: 'POST', body: JSON.stringify(data) })
-export const startSession = (data) => request('/sessions', { method: 'POST', body: JSON.stringify(data) })
+// Explanations
+export const createExplanation = (data) =>
+  request('/explanations', { method: 'POST', body: JSON.stringify(data) })
+
+// Learning sessions
+export const startSession = (data) =>
+  request('/sessions', { method: 'POST', body: JSON.stringify(data) })
+
+export const getUserSessions = () => request('/sessions')
+
 export const getSession = (sessionId) => request(`/sessions/${sessionId}`)
+
 export const getSessionMessages = (sessionId) => request(`/sessions/${sessionId}/messages`)
-export const sendSessionMessage = (sessionId, content) => request(`/sessions/${sessionId}/messages`, { method: 'POST', body: JSON.stringify({ content }) })
+
+export const sendSessionMessage = (sessionId, content) =>
+  request(`/sessions/${sessionId}/messages`, {
+    method: 'POST',
+    body: JSON.stringify({ content }),
+  })
+
+// Reports
+export const generateReport = (sessionId) =>
+  request(`/sessions/${sessionId}/report`, { method: 'POST' })
+
+export const getReport = (sessionId) => request(`/sessions/${sessionId}/report`)
