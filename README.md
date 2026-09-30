@@ -4,7 +4,7 @@ Explain a concept in your own words. ConceptCoach asks reasoning-based follow-up
 one at a time, tracks the discussion over a fixed number of rounds, and ends with a scored
 report that shows what you actually understood — not just what you memorised.
 
-- **Live app:** `https://conceptcoach.vercel.app` <!-- TODO: replace with the real Vercel URL -->
+- **Live app:** `https://conceptcoachai.vercel.app`
 - **API:** https://conceptcoach-ai.onrender.com
 - **Backend repository:** https://github.com/shivhareharsh-005/Explained.AI
 
@@ -81,26 +81,28 @@ src/
 
 ```bash
 npm install
-cp .env.example .env     # VITE_API_URL=http://localhost:8000/api
 npm run dev              # http://localhost:5173
 ```
 
 The API runs separately (see the backend repository) on `http://localhost:8000`.
+The Vite dev server proxies `/api/*` to it (see `server.proxy` in `vite.config.js`),
+so no extra configuration is needed locally.
 
 ### Environment variables
 
 | Variable | Local | Production |
 | --- | --- | --- |
-| `VITE_API_URL` | `http://localhost:8000/api` | `/api` |
+| `VITE_API_URL` | *optional*, defaults to `/api` | *optional*, defaults to `/api` |
 
-In production the browser calls `/api/*` on its own origin and `vercel.json` proxies those
-requests to the Render API. Keeping the call same-origin means the auth cookie stays a
-first-party cookie — it works in Safari as well, and the client needs no CORS setup.
+In both environments the browser calls `/api/*` on its own origin: the Vite dev server
+proxies those in development, and `vercel.json` proxies them to the Render API in
+production. Keeping the call same-origin means the auth cookie stays a first-party
+cookie — it works in Safari as well, and the client needs no CORS setup.
 
 ## Deployment
 
-- **Frontend → Vercel:** framework preset `Vite`, build `npm run build`, output `dist`,
-  environment variable `VITE_API_URL=/api`
+- **Frontend → Vercel:** framework preset `Vite`, build `npm run build`, output `dist`
+  (no environment variables required — the client defaults to `/api`)
 - **API → Render:** build `npm install`, start `node src/index.js`, environment variables as
   documented in the backend repository (MongoDB Atlas network access must allow `0.0.0.0/0`
   because Render does not expose fixed outbound IPs on the free tier)
